@@ -1,0 +1,29 @@
+Sample Vulnerable Code (Python Example):
+
+
+
+import sqlite3
+
+def login(username, password):
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    # 🚨 Vulnerable: SQL Injection
+    cursor.execute(f"SELECT * FROM users WHERE username='{username}' AND password='{password}'")
+    result = cursor.fetchone()
+    return result
+
+⚠️ Issue → Ye code SQL Injection vulnerable hai. Agar koi username = 'admin' -- dal de, wo bypass ho jayega.
+
+Fix (Secure Coding Practice):
+
+
+
+import sqlite3
+
+def login(username, password):
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    # ✅ Secure: Use parameterized queries
+    cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
+    result = cursor.fetchone()
+    return result
